@@ -1,9 +1,12 @@
 :root {
-  --bg: #0a0809;
+  --bg-dark: #0a0809;
+  --bg-cream: #f5f0e9;
   --text: #ffffff;
+  --text-dark: #1a1416;
+  --text-dark-soft: #2b2326;
   --muted: #f3eee9;
-  --accent: #ef9aa6;          /* soft pink for "them?" and "not ready" */
-  --accent-strong: #f1a3ad;
+  --accent: #ef9aa6;          /* soft pink */
+  --accent-strong: #e26b7a;   /* deeper rose for "swipe", italic accents on light bg */
   --cta: #ef9aa6;
   --cta-hover: #f4b3bb;
   --cta-text: #1a1416;
@@ -11,6 +14,10 @@
 }
 
 * { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
 
 html, body {
   margin: 0;
@@ -25,15 +32,23 @@ html, body {
 
 img { max-width: 100%; display: block; }
 
-/* HERO ==================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
 .hero {
   position: relative;
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
   display: flex;
   align-items: center;
   isolation: isolate;
+  background: #0a0809;
 }
 
 .hero__image {
@@ -69,18 +84,16 @@ img { max-width: 100%; display: block; }
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 88px clamp(24px, 6vw, 96px);
+  padding: clamp(64px, 10vh, 96px) clamp(24px, 6vw, 96px);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: 1280px;
 }
 
-/* Title */
 .hero__title {
   font-family: 'Cormorant Garamond', 'Times New Roman', serif;
   font-weight: 500;
-  font-size: clamp(48px, 7.6vw, 104px);
+  font-size: clamp(44px, 7.6vw, 104px);
   line-height: 1.02;
   letter-spacing: -0.5px;
   margin: 0 0 28px;
@@ -94,9 +107,8 @@ img { max-width: 100%; display: block; }
   color: var(--accent);
 }
 
-/* Lede line */
 .hero__lede {
-  font-size: clamp(18px, 1.45vw, 22px);
+  font-size: clamp(17px, 1.45vw, 22px);
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: 0.1px;
@@ -109,7 +121,6 @@ img { max-width: 100%; display: block; }
   font-weight: 500;
 }
 
-/* Pink rule */
 .hero__divider {
   display: block;
   width: 110px;
@@ -120,17 +131,16 @@ img { max-width: 100%; display: block; }
   opacity: 0.95;
 }
 
-/* Sub copy */
 .hero__sub {
-  font-size: clamp(16px, 1.18vw, 18px);
+  font-size: clamp(15px, 1.18vw, 18px);
   font-weight: 400;
   line-height: 1.5;
-  margin: 0 0 40px;
+  margin: 0 0 36px;
   color: #efeae6;
   max-width: 32ch;
 }
 
-/* CTA button */
+/* CTA */
 .cta {
   --pad-x: clamp(28px, 3.4vw, 48px);
   --pad-y: clamp(16px, 1.7vw, 22px);
@@ -176,7 +186,7 @@ img { max-width: 100%; display: block; }
   padding: 0;
   display: flex;
   align-items: center;
-  gap: clamp(14px, 1.6vw, 24px);
+  gap: clamp(12px, 1.6vw, 24px);
   color: var(--accent);
   flex-wrap: wrap;
 }
@@ -195,6 +205,7 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: center;
   color: var(--accent);
+  flex-shrink: 0;
 }
 
 .feature__icon svg { width: 100%; height: 100%; }
@@ -216,36 +227,349 @@ img { max-width: 100%; display: block; }
   list-style: none;
 }
 
-/* Responsive ============================================== */
-@media (max-width: 900px) {
+/* Scroll cue */
+.hero__scroll {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  font-weight: 600;
+}
+
+.hero__scroll-arrow {
+  width: 1px;
+  height: 26px;
+  background: rgba(255,255,255,0.6);
+  position: relative;
+  animation: scroll-pulse 1.8s ease-in-out infinite;
+}
+
+.hero__scroll-arrow::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 8px;
+  height: 8px;
+  border-right: 1px solid rgba(255,255,255,0.6);
+  border-bottom: 1px solid rgba(255,255,255,0.6);
+  transform: translate(-50%, 50%) rotate(45deg);
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__scroll-arrow { animation: none; }
+}
+
+/* ============================================================
+   TRUTH SECTION (light cream background, two columns)
+   ============================================================ */
+.truth {
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  padding: clamp(56px, 8vw, 96px) clamp(20px, 5vw, 80px);
+}
+
+.truth__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+
+.truth__copy {
+  max-width: 520px;
+}
+
+/* Eyebrow */
+.truth__eyebrow {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 28px;
+}
+
+.truth__eyebrow-text {
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  color: var(--accent-strong);
+  text-transform: uppercase;
+}
+
+.truth__eyebrow-rule {
+  width: 36px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* Title */
+.truth__title {
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-weight: 500;
+  font-size: clamp(38px, 5.4vw, 68px);
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  margin: 0 0 16px;
+  color: var(--text-dark);
+}
+
+.truth__title em {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
+.truth__lede {
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-weight: 500;
+  color: var(--accent-strong);
+  margin: 0 0 36px;
+}
+
+/* Bulleted list with icons */
+.truth__list {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.truth-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.truth-item__icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  color: var(--accent-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.truth-item__icon svg { width: 100%; height: 100%; }
+
+.truth-item__body h3 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: clamp(15px, 1.05vw, 17px);
+  margin: 0 0 4px;
+  color: var(--text-dark);
+}
+
+.truth-item__body p {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: clamp(14px, 1vw, 16px);
+  line-height: 1.45;
+  margin: 0;
+  color: var(--text-dark-soft);
+}
+
+/* Divider */
+.truth__divider {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: 1px;
+  background: rgba(226, 107, 122, 0.45);
+  margin: 0 0 24px;
+}
+
+.truth__outro {
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.55;
+  color: var(--text-dark-soft);
+  margin: 0 0 28px;
+  max-width: 46ch;
+}
+
+.truth__outro .accent-link {
+  color: var(--accent-strong);
+  font-weight: 500;
+}
+
+.truth__close {
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-size: clamp(22px, 2.4vw, 32px);
+  line-height: 1.2;
+  color: var(--accent-strong);
+  margin: 0;
+  font-weight: 500;
+}
+
+.truth__close em {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.truth__close-underline {
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 2px;
+  padding-bottom: 4px;
+}
+
+/* Media (right column) */
+.truth__media {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.truth__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-image: url('assets/truth.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 6px;
+  box-shadow: 0 30px 60px rgba(20, 12, 14, 0.18);
+}
+
+/* ============================================================
+   RESPONSIVE — HERO
+   ============================================================ */
+@media (max-width: 1024px) {
   .hero__image {
     background-position: 70% center;
   }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    align-items: flex-end;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .hero__image {
+    background-position: 65% center;
+  }
+
+  /* On mobile, darken the bottom heavily so copy reads cleanly while
+     keeping the photograph visible at top. */
   .hero__overlay {
     background:
       linear-gradient(
         180deg,
         rgba(0,0,0,0.55) 0%,
-        rgba(0,0,0,0.40) 40%,
-        rgba(0,0,0,0.78) 100%
-      ),
-      linear-gradient(
-        90deg,
-        rgba(0,0,0,0.55) 0%,
-        rgba(0,0,0,0.20) 100%
+        rgba(0,0,0,0.30) 28%,
+        rgba(0,0,0,0.55) 52%,
+        rgba(0,0,0,0.92) 100%
       );
   }
+
   .hero__content {
-    padding: 72px 24px 56px;
+    padding: 60vh 22px 40px;
+    align-items: stretch;
   }
-  .cta { min-width: 100%; }
-  .features { gap: 14px; }
+
+  .hero__title {
+    font-size: clamp(40px, 12vw, 64px);
+    margin-bottom: 18px;
+  }
+
+  .hero__lede {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .hero__sub {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+
+  .cta {
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 28px;
+  }
+
+  .features {
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .feature__sep { height: 24px; }
+  .feature__label { font-size: 10px; letter-spacing: 0.14em; }
+
+  .hero__scroll { bottom: 10px; font-size: 9px; }
+  .hero__scroll-arrow { height: 20px; }
+}
+
+@media (max-width: 420px) {
+  .hero__title { font-size: 38px; }
+  .feature__icon { width: 22px; height: 22px; }
+  .feature__label br { display: none; }
+  .feature__label { line-height: 1.1; }
+}
+
+/* ============================================================
+   RESPONSIVE — TRUTH SECTION
+   ============================================================ */
+@media (max-width: 900px) {
+  .truth__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(28px, 6vw, 48px);
+  }
+
+  .truth__copy {
+    max-width: 100%;
+    order: 2;
+  }
+
+  .truth__media {
+    order: 1;
+  }
+
+  .truth__image {
+    aspect-ratio: 16 / 11;
+    max-height: 60vh;
+  }
+
+  .truth__divider {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 520px) {
-  .hero__title { font-size: 44px; }
-  .feature__label { font-size: 10px; }
-  .feature__sep { height: 22px; }
+  .truth {
+    padding: 56px 20px;
+  }
+
+  .truth__title { font-size: clamp(32px, 9vw, 44px); }
+  .truth__close { font-size: 22px; }
+  .truth__list { gap: 18px; }
+  .truth-item { gap: 14px; }
+  .truth-item__icon { width: 24px; height: 24px; }
+  .truth__image { aspect-ratio: 4 / 3; }
 }
 
 @media (prefers-reduced-motion: reduce) {
